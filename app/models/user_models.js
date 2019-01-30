@@ -23,6 +23,18 @@ const UserSchema = mongoose.Schema({
     password: {
         type: String
     },
+    is_verified: {
+        type: Boolean,
+        default: false
+    },
+    email_verifiation_token: {
+        type: String,
+        default:''
+    },
+    forget_password_token: {
+        type:String,
+        default:''
+    },
     createdOn: {
         type: Date,
         default: Date.now()

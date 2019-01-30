@@ -6,18 +6,27 @@
  * @since  : 17/01/19 
  */
 const mongoose = require('mongoose');
-//Creating chat schema using moongose
-const ChatSchema = mongoose.Schema({
-    senderName: {
-        type: String
+//Creating token schema using moongose
+
+const tokenSchema = mongoose.Schema({
+    _userId: {
+        type: mongoose.Schema.Types.ObjectId, 
+        required: true, 
+        ref: 'User' 
     },
-    reciverName: {
-        type: String
+    token: { 
+        type: String, 
+        required: true 
     },
-    message: {
-        type: String
-    },
+    createdAt: { 
+        type: Date, 
+        equired: true, 
+        default: Date.now, 
+        expires: 43200 
+    }
 });
+
+
 var chat = mongoose.model('Chat', ChatSchema);
 function chatModel() {
 

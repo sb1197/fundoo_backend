@@ -7,8 +7,8 @@
  */
 const userService = require('../services/user_services');
 const { check, validationResult } = require('express-validator/check');
-const jwt = require('jsonwebtoken');
-
+const mailSent = require('../middleware/SendMail');
+const utility = require('../utility/utility')
 
 exports.registration = (req, res) => {
     var responseResult = {};
@@ -36,10 +36,20 @@ exports.registration = (req, res) => {
             responseResult.error = err;
             res.status(500).send(responseResult)
         }
-        else {
+        else 
+        {
             responseResult.success = true;
             responseResult.result = result;
-            res.status(200).send(responseResult);
+            const payload =  {
+                user_name : responseResult.result.email
+            }
+            const obj = utility.GenerateToken(payload);
+            console.log('47--UserCtrl--Token return from utility while registration :===',obj); 
+            const url = `http://localhost:3000/verifyEmail/+${obj.token}`;
+            mailSent.sendEMailFunction(url);
+            //Send email using this token generated
+            // res.status(200).send(obj);
+            res.status(200).send(url);
         }
     })
 }
@@ -73,12 +83,8 @@ exports.login = (req, res) => {
                 user_id : responseResult.result._id,
                 user_name : responseResult.result.email
              }
-            const token =  jwt.sign({payload}, 'secretkey', { expiresIn: 1440 }) // expires in 1 hours
-            const obj = {
-                success: true,
-                message: 'Authentication done!',
-                token: token
-            }
+            const obj = utility.GenerateToken(payload);
+            console.log('79--UserCtrl--Token return from utility :===',obj); 
             res.status(200).send(obj);
         }
     })
@@ -98,5 +104,22 @@ exports.getAllUser = (req,res) => {
             res.status(200).send(responseResult);
         }
     })
+}
+
+exports.sendResponse = (res) => {
+    console.log('107---in user ctrl send token is verified response');
+    
+        if (err) {
+            responseResult.success = false;
+            responseResult.error = err;
+            res.status(500).send(responseResult)
+        }
+        else 
+        {
+            console.log('116---in user ctrl token is verified giving response');
+            responseResult.success = true;
+            responseResult.result = result;
+            res.status(200).send(responseResult);
+        }
 }
 
