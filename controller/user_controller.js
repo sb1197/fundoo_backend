@@ -36,19 +36,19 @@ exports.registration = (req, res) => {
             responseResult.error = err;
             res.status(500).send(responseResult)
         }
-        else 
-        {
+        else {
             responseResult.success = true;
             responseResult.result = result;
-            const payload =  {
-                user_name : responseResult.result.email
+            const payload = {
+                user_name: responseResult.result._id
             }
+            console.log(payload);
+
             const obj = utility.GenerateToken(payload);
-            console.log('47--UserCtrl--Token return from utility while registration :===',obj); 
-            const url = `http://localhost:3000/verifyEmail/+${obj.token}`;
+            console.log('47--UserCtrl--Token return from utility while registration :===', obj);
+            const url = `http://localhost:3000/verifyEmail/${obj.token}`;
             mailSent.sendEMailFunction(url);
             //Send email using this token generated
-            // res.status(200).send(obj);
             res.status(200).send(url);
         }
     })
@@ -75,22 +75,23 @@ exports.login = (req, res) => {
             responseResult.error = err;
             res.status(500).send(responseResult)
         }
-        else 
-        {
+        else {
             responseResult.success = true;
             responseResult.result = result;
-            const payload =  {
-                user_id : responseResult.result._id,
-                user_name : responseResult.result.email
-             }
-            const obj = utility.GenerateToken(payload);
-            console.log('79--UserCtrl--Token return from utility :===',obj); 
-            res.status(200).send(obj);
+            const payload = {
+                user_id: responseResult.result._id,
+                user_name: responseResult.result.email
+            }
+            // const obj = utility.GenerateToken(payload);
+            // console.log('79--UserCtrl--Token return from utility :===',obj); 
+            // res.status(200).send(obj);
+            res.status(200).send(responseResult)
+
         }
     })
 }
 
-exports.getAllUser = (req,res) => {
+exports.getAllUser = (req, res) => {
     var responseResult = {};
     userService.getAllUser((err, result) => {
         if (err) {
@@ -106,20 +107,22 @@ exports.getAllUser = (req,res) => {
     })
 }
 
-exports.sendResponse = (res) => {
+exports.sendResponse = (req, res) => {
+    var responseResult = {};
     console.log('107---in user ctrl send token is verified response');
-    
+    userService.redirect(req.decoded, (err, result) => {
         if (err) {
             responseResult.success = false;
             responseResult.error = err;
             res.status(500).send(responseResult)
         }
-        else 
-        {
+        else {
             console.log('116---in user ctrl token is verified giving response');
             responseResult.success = true;
             responseResult.result = result;
             res.status(200).send(responseResult);
         }
+    })
+
 }
 

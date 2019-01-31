@@ -45,3 +45,27 @@ exports.getAllUser = (req,callback) =>
     })
 }
 
+exports.redirect = (decoded, callback) => 
+{
+    // async (res) => {
+    //     try 
+    //     { 
+    //         await userModel.updateUser(decoded, { $set: { isConfirmed:true } });
+    //     } 
+    //     catch (e) 
+    //     {
+    //         res.send('error');
+    //     }
+    //     return res.redirect('http://localhost:3000/login');
+    // }
+
+    userModel.updateUser(decoded, (err, result) => {
+        if (err) {     
+            callback(err);
+        } else {
+            callback(null, result);
+        }
+    })
+}
+
+

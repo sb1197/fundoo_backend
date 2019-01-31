@@ -1,6 +1,6 @@
 /**
- * Purpose : To create a chat schema and store data into database.
- * @file   : chat_model.js
+ * Purpose : To create a token schema and store data into database.
+ * @file   : token_model.js
  * @author : Shweta Bochare
  * @version: 0.1
  * @since  : 17/01/19 

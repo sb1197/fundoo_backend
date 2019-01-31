@@ -4,7 +4,7 @@ module.exports = {
     GenerateToken(payload)
     {
        
-        const token =  jwt.sign({payload}, 'secretkey', { expiresIn: 1440 }) // expires in 1 hours
+        const token =  jwt.sign({payload}, 'secretkey', { expiresIn: '24h' }) // expires in 1 hours
         const obj = {
             success: true,
             message: 'Token Generated Successfully!!',

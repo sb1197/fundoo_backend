@@ -18,7 +18,7 @@ const UserSchema = mongoose.Schema({
         type: String
     },
     email: {
-        type: String
+        type: String,
     },
     password: {
         type: String
@@ -27,13 +27,13 @@ const UserSchema = mongoose.Schema({
         type: Boolean,
         default: false
     },
-    email_verifiation_token: {
-        type: String,
-        default:''
-    },
+    // email_verifiation_token: {
+    //     type: String,
+    //     default:''
+    // },
     forget_password_token: {
-        type:String,
-        default:''
+        type: String,
+        default: ''
     },
     createdOn: {
         type: Date,
@@ -55,25 +55,20 @@ userModel.prototype.save = (data, callback) => {
         if (err) {
             callback(err);
         }
-        else 
-        {
-            if (result !== null) 
-            {
+        else {
+            if (result !== null) {
                 callback("user already exits with this username");
                 console.log("result", result);
             }
-            else 
-            {
+            else {
                 //Create hash value of user password
                 data.password = bcrypt.hashSync(data.password, saltRounds);
                 var newData = new user(data);
                 newData.save((err, result) => {
-                    if (err) 
-                    {
+                    if (err) {
                         callback(err);
                     }
-                    else 
-                    {
+                    else {
                         callback(null, result);
                     }
                 })
@@ -87,23 +82,18 @@ userModel.prototype.findUser = (data, callback) => {
         if (err) {
             callback(err);
         }
-        else 
-        {           
-            if (result !== null && data.email == result.email)
-            {   
-                if (result !== null || data.password === result.password) 
-                {                  
+        else {
+            if (result !== null && data.email == result.email) {
+                if (result !== null || data.password === result.password) {
                     callback(null, result);
                 }
-                else 
-                {
+                else {
                     callback("incorrect password");
                 }
             }
-            else
-            {
+            else {
                 callback("incorect mail")
-            }       
+            }
         }
     });
 }
@@ -113,8 +103,18 @@ userModel.prototype.getAllUser = (callback) => {
         if (err) {
             callback(err);
         }
-        else 
-        {       
+        else {
+            callback(null, result);
+        }
+    });
+}
+
+userModel.prototype.updateUser = (data, callback) => {
+    user.updateOne({ _id: data.payload.user_name }, { is_verified: true }, (err, result) => {
+        if (err) {
+            callback(err);
+        }
+        else {
             callback(null, result);
         }
     });
