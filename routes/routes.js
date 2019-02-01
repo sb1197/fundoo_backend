@@ -14,7 +14,11 @@ const emailVerification = require('../middleware/VerifyEmail');
 // Using router.post() sending data to database
 router.post('/registration', userController.registration);
 router.post('/login',loginMiddleware.loginAuth,userController.login);
-router.get('/getAllUser', loginMiddleware.checkToken,userController.getAllUser);
+router.get('/getAllUser', userController.getAllUser);
+router.post('/verifyUser', userController.getUser);
 router.post('/verifyEmail/:token2', loginMiddleware.checkToken,userController.sendResponse);
+router.post('/resetpassword/:token', loginMiddleware.checkToken,userController.sendResponse1);
+
+
 
 module.exports = router;

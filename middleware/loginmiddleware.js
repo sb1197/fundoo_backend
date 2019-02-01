@@ -39,11 +39,11 @@ exports.loginAuth = (req,res,next)=> {
 
 exports.checkToken = (req,res,next) => {
     console.log('41--req body in middleware--',req.body);
-    console.log('42--req headers in middleware--',req.headers['token']);
+    console.log('42--req `headers` in middleware--',req.headers['token']);
     
 
     var token1 = req.headers['token'];
-    // console.log('46--in middleware--token to decode--',token1);
+    console.log('46--in middleware--token to decode--',token1);
     
     // decode token
     if (token1)

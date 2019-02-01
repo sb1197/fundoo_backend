@@ -33,6 +33,17 @@ exports.login = (data, callback) =>
     })
 }
 
+exports.redirect = (decoded, callback) => 
+{
+    userModel.updateUser(decoded, (err, result) => {
+        if (err) {     
+            callback(err);
+        } else {
+            callback(null, result);
+        }
+    })
+}
+
 exports.getAllUser = (req,callback) => 
 {
     userModel.getAllUser(req,(err, result) => 
@@ -45,21 +56,11 @@ exports.getAllUser = (req,callback) =>
     })
 }
 
-exports.redirect = (decoded, callback) => 
-{
-    // async (res) => {
-    //     try 
-    //     { 
-    //         await userModel.updateUser(decoded, { $set: { isConfirmed:true } });
-    //     } 
-    //     catch (e) 
-    //     {
-    //         res.send('error');
-    //     }
-    //     return res.redirect('http://localhost:3000/login');
-    // }
 
-    userModel.updateUser(decoded, (err, result) => {
+exports.getUserEmail = (data, callback) => 
+{
+    userModel.findUserEmail(data, (err, result) => 
+    {     
         if (err) {     
             callback(err);
         } else {
@@ -68,4 +69,15 @@ exports.redirect = (decoded, callback) =>
     })
 }
 
-
+exports.redirect1 = (decoded, callback) => 
+{
+    console.log('74-- userservice--decoded--',decoded);
+    
+    userModel.updateUserPassword(decoded, (err, result) => {
+        if (err) {     
+            callback(err);
+        } else {
+            callback(null, result);
+        }
+    })
+}

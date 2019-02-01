@@ -27,10 +27,6 @@ const UserSchema = mongoose.Schema({
         type: Boolean,
         default: false
     },
-    // email_verifiation_token: {
-    //     type: String,
-    //     default:''
-    // },
     forget_password_token: {
         type: String,
         default: ''
@@ -98,24 +94,33 @@ userModel.prototype.findUser = (data, callback) => {
     });
 }
 
-userModel.prototype.getAllUser = (callback) => {
-    user.find({}, (err, result) => {
-        if (err) {
+userModel.prototype.updateUserPassword = (data, callback) => {
+    console.log('98-- in model--data:--',data);  
+    user.updateOne({ _id: data.payload.user_name }, { password: data.password }, (err, result) => {
+        if (err) 
+        {
             callback(err);
         }
-        else {
+        else 
+        {
             callback(null, result);
         }
     });
 }
 
-userModel.prototype.updateUser = (data, callback) => {
-    user.updateOne({ _id: data.payload.user_name }, { is_verified: true }, (err, result) => {
+userModel.prototype.findUserEmail = (data, callback) => {
+    user.findOne({ "email": data.email }, (err, result) => {
         if (err) {
             callback(err);
         }
         else {
-            callback(null, result);
+            if (result !== null && data.email == result.email) { 
+                callback(null, result);   
+            }
+            else 
+            {
+                callback("incorect mail")
+            }
         }
     });
 }

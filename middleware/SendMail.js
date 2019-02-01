@@ -14,8 +14,8 @@ exports.sendEMailFunction = (url) => {
     });
     const mailOptions = {
         from: 'shwetabingo07@gmail.com',        // sender address
-        to: 'jyotsanakhaparde0597@gmail.com',   // list of receivers
-        subject: 'Subject of your email',       // Subject line
+        to: 'priyabochare07@gmail.com',   // list of receivers
+        subject: 'Verify your email',           // Subject line
         text: url
     };
     transporter.sendMail(mailOptions, function (err, info) {

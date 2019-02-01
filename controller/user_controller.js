@@ -80,29 +80,12 @@ exports.login = (req, res) => {
             responseResult.result = result;
             const payload = {
                 user_id: responseResult.result._id,
-                user_name: responseResult.result.email
+                user_name : responseResult.result.email
             }
-            // const obj = utility.GenerateToken(payload);
-            // console.log('79--UserCtrl--Token return from utility :===',obj); 
-            // res.status(200).send(obj);
-            res.status(200).send(responseResult)
+            console.log(payload);
+            const obj = utility.GenerateToken(payload);
+            res.status(200).send(obj)
 
-        }
-    })
-}
-
-exports.getAllUser = (req, res) => {
-    var responseResult = {};
-    userService.getAllUser((err, result) => {
-        if (err) {
-            responseResult.success = false;
-            responseResult.error = err;
-            res.status(500).send(responseResult)
-        }
-        else {
-            responseResult.success = true;
-            responseResult.result = result;
-            res.status(200).send(responseResult);
         }
     })
 }
@@ -123,6 +106,66 @@ exports.sendResponse = (req, res) => {
             res.status(200).send(responseResult);
         }
     })
-
 }
 
+exports.getAllUser = (req,res) => {
+    var responseResult = {}; 
+    userService.getAllUser((err, result) => {
+        if (err) {
+            responseResult.success = false;
+            responseResult.error = err;
+            res.status(500).send(responseResult)
+        }
+        else {
+            responseResult.success = true;
+            responseResult.result = result;
+            res.status(200).send(responseResult);
+        }
+    })
+}
+
+exports.getUser = (req, res) => {
+    var responseResult = {};
+    console.log('124--in usrctrl--req:--',req.body);
+    userService.getUserEmail(req.body, (err, result) => {
+        if (err) {
+            responseResult.success = false;
+            responseResult.error = err;
+            res.status(500).send(responseResult)
+        }
+        else {
+            responseResult.success = true;
+            responseResult.result = result;
+            const payload = {
+                user_id: responseResult.result._id
+            }
+            console.log(payload);
+            const obj = utility.GenerateToken(payload);
+            const url = `http://localhost:3000/resetpassword/${obj.token}`;
+            mailSent.sendEMailFunction(url);
+            //Send email using this token generated
+            res.status(200).send(url);
+            // res.status(200).send(responseResult)
+
+        }
+    })
+}
+
+
+exports.sendResponse1 = (req, res) => {
+    var responseResult = {};
+    console.log('107---in user ctrl send token is verified response',req.body);
+    userService.redirect1(req.decoded, (err, result) => {
+        if (err) {
+            responseResult.success = false;
+            responseResult.error = err;
+            res.status(500).send(responseResult)
+        }
+        else {
+            console.log('116---in user ctrl token is verified giving response');
+            responseResult.success = true;
+            responseResult.result = result;
+            res.status(200).send(responseResult);
+        }
+    })
+}
