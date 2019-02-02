@@ -35,7 +35,7 @@ exports.login = (data, callback) =>
 
 exports.redirect = (decoded, callback) => 
 {
-    userModel.updateUser(decoded, (err, result) => {
+    userModel.confirmUser(decoded, (err, result) => {
         if (err) {     
             callback(err);
         } else {
@@ -69,11 +69,9 @@ exports.getUserEmail = (data, callback) =>
     })
 }
 
-exports.redirect1 = (decoded, callback) => 
-{
-    console.log('74-- userservice--decoded--',decoded);
-    
-    userModel.updateUserPassword(decoded, (err, result) => {
+exports.resetPass = (req, callback) => 
+{  
+    userModel.updateUserPassword(req, (err, result) => {
         if (err) {     
             callback(err);
         } else {

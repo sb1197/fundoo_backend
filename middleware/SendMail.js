@@ -14,7 +14,7 @@ exports.sendEMailFunction = (url) => {
     });
     const mailOptions = {
         from: 'shwetabingo07@gmail.com',        // sender address
-        to: 'priyabochare07@gmail.com',   // list of receivers
+        to: 'priyabochare07@gmail.com',         // list of receivers
         subject: 'Verify your email',           // Subject line
         text: url
     };

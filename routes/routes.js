@@ -10,15 +10,12 @@ const router = express.Router();
 //Setting controller path into controller variables
 const userController = require('../controller/user_controller');
 const loginMiddleware = require('../middleware/loginmiddleware')
-const emailVerification = require('../middleware/VerifyEmail');
 // Using router.post() sending data to database
 router.post('/registration', userController.registration);
 router.post('/login',loginMiddleware.loginAuth,userController.login);
-router.get('/getAllUser', userController.getAllUser);
+// router.get('/getAllUser', userController.getAllUser);
 router.post('/verifyUser', userController.getUser);
-router.post('/verifyEmail/:token2', loginMiddleware.checkToken,userController.sendResponse);
-router.post('/resetpassword/:token', loginMiddleware.checkToken,userController.sendResponse1);
-
-
+router.post('/verifyEmail/:token', loginMiddleware.checkToken,userController.sendResponse);
+router.post('/resetpassword/:token', loginMiddleware.checkToken,userController.setPassword);
 
 module.exports = router;

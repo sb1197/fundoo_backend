@@ -82,10 +82,8 @@ exports.login = (req, res) => {
                 user_id: responseResult.result._id,
                 user_name : responseResult.result.email
             }
-            console.log(payload);
             const obj = utility.GenerateToken(payload);
             res.status(200).send(obj)
-
         }
     })
 }
@@ -94,12 +92,14 @@ exports.sendResponse = (req, res) => {
     var responseResult = {};
     console.log('107---in user ctrl send token is verified response');
     userService.redirect(req.decoded, (err, result) => {
-        if (err) {
+        if (err) 
+        {
             responseResult.success = false;
             responseResult.error = err;
             res.status(500).send(responseResult)
         }
-        else {
+        else 
+        {
             console.log('116---in user ctrl token is verified giving response');
             responseResult.success = true;
             responseResult.result = result;
@@ -126,7 +126,6 @@ exports.getAllUser = (req,res) => {
 
 exports.getUser = (req, res) => {
     var responseResult = {};
-    console.log('124--in usrctrl--req:--',req.body);
     userService.getUserEmail(req.body, (err, result) => {
         if (err) {
             responseResult.success = false;
@@ -145,17 +144,14 @@ exports.getUser = (req, res) => {
             mailSent.sendEMailFunction(url);
             //Send email using this token generated
             res.status(200).send(url);
-            // res.status(200).send(responseResult)
-
         }
     })
 }
 
 
-exports.sendResponse1 = (req, res) => {
+exports.setPassword = (req, res) => {
     var responseResult = {};
-    console.log('107---in user ctrl send token is verified response',req.body);
-    userService.redirect1(req.decoded, (err, result) => {
+    userService.resetPass(req, (err, result) => {
         if (err) {
             responseResult.success = false;
             responseResult.error = err;

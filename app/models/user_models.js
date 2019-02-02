@@ -27,10 +27,6 @@ const UserSchema = mongoose.Schema({
         type: Boolean,
         default: false
     },
-    forget_password_token: {
-        type: String,
-        default: ''
-    },
     createdOn: {
         type: Date,
         default: Date.now()
@@ -51,7 +47,8 @@ userModel.prototype.save = (data, callback) => {
         if (err) {
             callback(err);
         }
-        else {
+        else 
+        {
             if (result !== null) {
                 callback("user already exits with this username");
                 console.log("result", result);
@@ -94,19 +91,33 @@ userModel.prototype.findUser = (data, callback) => {
     });
 }
 
-userModel.prototype.updateUserPassword = (data, callback) => {
-    console.log('98-- in model--data:--',data);  
-    user.updateOne({ _id: data.payload.user_name }, { password: data.password }, (err, result) => {
-        if (err) 
-        {
+userModel.prototype.updateUserPassword = (req, callback) => {
+    console.log('98-- in model--data:--', req.decoded);
+    console.log('98-- in model--body:--', req.body);
+    let newpassword = bcrypt.hashSync(req.body.password, saltRounds);
+    console.log('101--new pass bcrypt--',newpassword);
+    user.updateOne({ _id: req.decoded.payload.user_id }, { password: newpassword }, (err, result) => {
+        if (err) {
             callback(err);
         }
-        else 
-        {
+        else {
             callback(null, result);
         }
     });
 }
+
+
+userModel.prototype.confirmUser = (data, callback) => {
+    user.updateOne({ _id: data.payload.id }, { is_verified: true }, (err, result) => {
+        if (err) {
+            callback(err);
+        }
+        else {
+            callback(null, result);
+        }
+    });
+}
+
 
 userModel.prototype.findUserEmail = (data, callback) => {
     user.findOne({ "email": data.email }, (err, result) => {
@@ -114,11 +125,10 @@ userModel.prototype.findUserEmail = (data, callback) => {
             callback(err);
         }
         else {
-            if (result !== null && data.email == result.email) { 
-                callback(null, result);   
+            if (result !== null && data.email == result.email) {
+                callback(null, result);
             }
-            else 
-            {
+            else {
                 callback("incorect mail")
             }
         }

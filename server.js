@@ -7,13 +7,10 @@ var cors = require('cors')
 // const jwt = require('jsonwebtoken');
 var bodyParser = require('body-parser');
 const port = 3001;
-connections = [];
 // extended: true -> then you can parse nested objects
-app.use(cors())
+app.use(cors())     //used to connect two ports without any interrupt
 app.use(bodyParser.urlencoded({ extended: true }))
-
 app.use(bodyParser.json())
-
 //it will match any path that begins with '/'
 app.use('/', router);
 // Configuring the database(legacy code)
