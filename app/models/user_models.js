@@ -80,7 +80,8 @@ userModel.prototype.findUser = (data, callback) => {
                 if (result !== null || data.password === result.password) {
                     callback(null, result);
                 }
-                else {
+                else 
+                {
                     callback("incorrect password");
                 }
             }
